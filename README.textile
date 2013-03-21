@@ -1,0 +1,109 @@
+h3. Redmine Default Columns plugin
+
+Plugin allows to apply default queries for individual project or for projects based on their type.
+Also it allows users to define their own default queries for each project or for all projects.
+
+h3. Features
+
+* Uses existing query system thus providing compatibility with future Redmine versions
+* Allows to define default query on project by project basis
+* Allows to define default global query for displaying all issues
+* Allows to define default query based on project custom field value
+* Allows to define user his/hers own default queries for each project
+* Allows to define user his/hers global query for displaying all issues
+* Allows to define user query that will be applied individually for each user allowing to directly jump to project and apply specefic query upon logon
+
+h3. Details
+
+This plugin is very useful if you are using Redmine projects for more than one purpose. For example, we have projects for bug-tracking as well as for project management and invoice tracking. I was really missing the ability to define default query for project or group of projects - and without it it was very inconvenient to create set of public queries which you had manually apply each time you switch projects.
+
+Also in latest versions plugin allows to define default view for each user - which is very handy, because columns to display could differ from user to user.
+
+This plugin came as an answer to my own request #3967 (http://www.redmine.org/issues/3967)
+
+h3. Logic behind the plugin
+
+First of all - plugin uses existing queries system thus (hopefully) maintaining maximal compatibility with further Redmine versions. It uses existing queries and small patch to the Issues Controller to apply default query if no query is defined.
+
+Plugin retrieves queries from dedicated project (defined in settings) and applies them to the current project.
+
+I would advise to create dedicated project which will hold all the necessary types of queries. This project has to include all trackers and all custom fields to make all the types of queries possible.
+
+For user defined default queries plugin uses name, defined in settings (*MyDefault* by default) for projects and *MyGlobal* (by default) for all issues.
+
+For redirection to user defined project with user defined query, *MyHome* query searched by default (redefinable in settings)
+
+Please note that all user queries should not be public.
+
+h3. How it works
+
+There are several nested levels by which default query is determined
+
+If issues from all projects are displayed
+
+* If the project has query with the name defined in plugin settings (field *Default user global query name*) which belongs to logged user, plugin uses this query as a default query
+* Query with name *Global_Default* is retrieved from project defined in the drop down named *Project with default queries* (on the plugin settings screen) and applied to all issues display
+* If there are no such query exist then plugin does nothing
+
+If issues from specific project are displayed
+
+* If the project has query with the name defined in plugin settings (field *Default user query name*) which belongs to logged user plugin uses this query as a default query
+* If the project has query with the name defined in plugin settings (field *Default query name*) plugin uses this query as a default query
+* If no such query exists in project, value of project custom field (defined in drop down *Custom field to define type* on the plugin settings screen) appended to the string *Default_* to create query name
+* If no such custom field exists, value *Default_Project* used for query name
+* After that query with such name is retrieved from project defined in the drop down named *Project with default queries* (on the plugin settings screen)
+* If there are no such query exist then plugin does nothing
+
+Also plugin defines controller named *query_per_project* and action *redirect_to_user_query*
+
+When invoked, it searches for query named *MyHome* (by default, redifinable in settings) which belongs to current user and redirects to this project, applying this query. It can be convenietly used with *redmine_homepage* plugin by Eric Davis
+
+Also it substitutes views/issues/index.rhtml to collapse filters pane when any of the queries above applied.
+
+h3. Example of usage
+
+For example, we have projects of three several types - one for bug-tracking, another one for PM and another one for invoices. Also we have one special project named 'SpecialCase' for whom we want to have its own default query.
+
+Step by step tutorial
+
+* Create special project which will hold all our default queries (lets call it 'DefaultQueries') We should include all possible trackers and issues' custom fields to this project to be able to create queries for all our projects
+* Create project custom field which will hold project type (lets make it drop-down named 'Type' with values 'Bugs', 'Invoices' and 'Tasks'). To make things easier we'll make it required for all projects with the default value of 'Tasks'
+* Set this custom field for each project according to the project type
+* Go to plugin settings and select project we created (DefaultQueries) and custom field name (Type). We will leave value for the 'Default query name' as it was - 'Default'
+* Go to the project 'DefaultQueries' and create there three queries named 'Default_Bugs', 'Default_Tasks' and 'Default_Invoices' For each query we can use its own set of columns/sort order/grouping
+* Go to the project 'SpecialCase' and create query named 'Default'
+
+We all set for now.
+
+What would happen if we will decide to view issues in the project with custom field 'Type' set to 'Bugs'? Plugin will lookup query named 'Default_Bugs' in project 'DefaultQueries' and apply it to the issues view! Same will be done for projects with type 'Tasks' and 'Invoices' - queries named 'Default_Tasks' and 'Default_Invoices' will be applied to their views. If we will choose project named 'SpecialCase' the query named 'Default' will be applied because it exists there regardless of the project type.
+
+h3. Installation and Setup
+
+# Please *do* remove folder _redmine_default_columns_ completely before installing new version
+# Install plugin "Plugin views with revisions":http://www.redmine.org/plugins/redmine_plugin_views_revisions if you do not have it installed
+# Follow the Redmine plugin installation steps at: http://www.redmine.org/wiki/redmine/Plugins
+# Run rake task
+ *rake redmine:plugins:process_version_change RAILS_ENV=production*
+# Restart your Redmine web servers (e.g. mongrel, thin, mod_rails)
+# Login as administrator and configure the plugin (Administration > Plugins > Configure)
+
+h3. Release history
+
+0.1.1
+
+* Rails 3 (Redmine 2.x) compatibility
+
+0.1.0
+
+* Plugin depends on "Plugin views with revisions":http://www.redmine.org/plugins/redmine_plugin_views_revisions for further Redmine compatibility
+
+0.0.8
+
+* Patches QueriesHelper differently for more compatibility
+* Now compatible with BetterGanttChart plugin
+
+0.0.7
+
+* Redmine 1.3.x compatibility
+* *Does not* compatible with versions of Redmine prior to 1.3.x
+
