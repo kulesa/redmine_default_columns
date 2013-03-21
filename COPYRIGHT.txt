@@ -2,7 +2,7 @@ Default columns is a Redmine plugin that allows to apply
 default queries for individual project or for projects
 based on their type.
 
-Copyright (C) 2010 Vitaly Klimov
+Copyright (C) 2010,2011,2012 Vitaly Klimov
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License

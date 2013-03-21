@@ -1,32 +1,32 @@
 <p>
   <%= label_tag('settings[query_templates_project_id]', l(:label_plugin_dc_query_project)) %>
-	<%= select_tag( 'settings[query_templates_project_id]',
-			dc_fill_projects_dropdown(@settings['query_templates_project_id']))%>
+  <%= select_tag( 'settings[query_templates_project_id]',
+      dc_fill_projects_dropdown(@settings['query_templates_project_id']))%>
 </p>
 
 <p>
   <%= label_tag('settings[type_custom_field_name]', l(:label_plugin_dc_custom_field_name)) %>
-	<%= select_tag( 'settings[type_custom_field_name]',
-			dc_fill_custom_fields_dropdown(@settings['type_custom_field_name']))%>
+  <%= select_tag( 'settings[type_custom_field_name]',
+      dc_fill_custom_fields_dropdown(@settings['type_custom_field_name']))%>
 </p>
 
 <p>
   <%= label_tag('settings[my_global_query_name]', l(:label_plugin_dc_my_global_name)) %>
-	<%= text_field_tag 'settings[my_global_query_name]', @settings['my_global_query_name'], {:size => 30, :maxlength => 30 } %>
+  <%= text_field_tag 'settings[my_global_query_name]', @settings['my_global_query_name'], {:size => 30, :maxlength => 30 } %>
 </p>
 
 <p>
   <%= label_tag('settings[my_default_query_name]', l(:label_plugin_dc_my_default_name)) %>
-	<%= text_field_tag 'settings[my_default_query_name]', @settings['my_default_query_name'], {:size => 30, :maxlength => 30 } %>
+  <%= text_field_tag 'settings[my_default_query_name]', @settings['my_default_query_name'], {:size => 30, :maxlength => 30 } %>
 </p>
 
 <p>
   <%= label_tag('settings[default_query_name]', l(:label_plugin_dc_default_name)) %>
-	<%= text_field_tag 'settings[default_query_name]', @settings['default_query_name'], {:size => 30, :maxlength => 30 } %>
+  <%= text_field_tag 'settings[default_query_name]', @settings['default_query_name'], {:size => 30, :maxlength => 30 } %>
 </p>
 
 <p>
   <%= label_tag('settings[my_home_query_name]', l(:label_plugin_dc_my_home_default_name)) %>
-	<%= text_field_tag 'settings[my_home_query_name]', @settings['my_home_query_name'], {:size => 30, :maxlength => 30 } %>
+  <%= text_field_tag 'settings[my_home_query_name]', @settings['my_home_query_name'], {:size => 30, :maxlength => 30 } %>
 </p>
 

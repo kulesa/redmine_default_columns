@@ -1,5 +1,7 @@
 module QPP_Constants
 
+  PLUGIN_NAME = :redmine_default_columns
+
   QUERY_TEMP_NAME = "_QPP_"
   QUERY_DEFAULT_GLOBAL_NAME = "Global_Default"
   QUERY_DEFAULT_PFX = "Default_"
@@ -10,5 +12,9 @@ module QPP_Constants
   MY_QUERY_GLOBAL_DEFAULT_NAME = "MyGlobal"
   MY_QUERY_HOME_NAME = "MyHome"
   MY_QUERY_HOME_NAME_DEFAULT = "My issues..."
+
+  def self.settings
+    Setting["plugin_#{PLUGIN_NAME.to_s}"]
+  end
 
 end
